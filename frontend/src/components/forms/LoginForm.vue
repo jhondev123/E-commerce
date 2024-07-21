@@ -24,13 +24,16 @@
   <script>
   import { ref } from 'vue';
   import axiosInstance from '../../configs/axiosConfig';
-  
+  import { useRouter } from 'vue-router';
+
+
+
   export default {
     setup() {
       const email = ref('');
       const password = ref('');
       const error = ref('');
-  
+      const router = useRouter();
       const login = async () => {
         try {
           const response = await axiosInstance.post('/login', {
@@ -41,11 +44,11 @@
           const token = response.data.token;
           localStorage.setItem('token', token);
   
-          console.log('Login bem-sucedido');
-          router.push({ name: 'home' });
+          router.push({name:'home'});
   
         } catch (err) {
-          error.value = 'Erro ao fazer login. Verifique suas credenciais.';
+          console.error('Login failed:', err); 
+          error.value = 'Login failed. Please try again.';
         }
       };
   

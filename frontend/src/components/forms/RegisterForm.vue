@@ -33,7 +33,8 @@
   <script>
   import { ref } from 'vue';
   import axiosInstance from '../../configs/axiosConfig';
-  
+  import { useRouter } from 'vue-router';
+
   export default {
     setup() {
       const form = ref({
@@ -42,18 +43,23 @@
         password: '',
         password_confirmation: ''
       });
+      const error = ref('');
   
       const register = async () => {
         try {
           const response = await axiosInstance.post('/register', form.value);
+          const router = useRouter();
+
           router.push({ name: 'login' });
-        } catch (error) {
-          
+        } catch (err) {
+          error.value = 'Register failed. Please try again.';
+
         }
       };
   
       return {
         form,
+        error,
         register
       };
     }
