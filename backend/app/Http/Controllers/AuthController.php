@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -14,7 +15,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            $token = $user->createToken('token-name')->plainTextToken;
+            $token = $user->createToken('token-name', ['*'], now()->addMinute())->plainTextToken;
 
             return response()->json(['token' => $token], 200);
         }
@@ -42,8 +43,26 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+
         ]);
 
         return response()->json(['message' => 'User registered successfully'], 201);
+    }
+
+    public function validateToken(Request $request)
+    {
+        $token = $request->bearerToken();
+
+        if (!$token) {
+            return response()->json(['error' => 'Token não fornecido'], 401);
+        }
+
+        $accessToken = PersonalAccessToken::findToken($token);
+
+        if (!$accessToken || $accessToken->expires_at->isPast()) {
+            return response()->json(['error' => 'Token inválido ou expirado'], 401);
+        }
+
+        return response()->json(['message' => 'Token válido'], 200);
     }
 }

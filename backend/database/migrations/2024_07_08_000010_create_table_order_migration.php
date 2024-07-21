@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order', function (Blueprint $table) {
-            $table->id;
+        Schema::create('orders', function (Blueprint $table) {
+            $table->increments('id');  // unsigned integer
+
             $table->float('price');
             $table->float('discount')->default(0);
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('address_id')->nullable();
-            
-            // Foreign keys
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('address_id')->references('id')->on('addresses')->onDelete('set null');
+
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('address_id')->constrained();
+
 
             $table->timestamps(); 
             $table->softDeletes();
@@ -32,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('order', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             // Remove foreign key constraints
             $table->dropForeign(['user_id']);
             $table->dropForeign(['address_id']);

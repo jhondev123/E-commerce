@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('table_address_migration', function (Blueprint $table) {
+        Schema::create('addresses', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedInteger('user_id')->nullable();
             $table->string('street', 100);
             $table->string('number', 10);
             $table->string('district', 100);
@@ -23,6 +22,7 @@ return new class extends Migration
             $table->string('country', 100);
             $table->string('complement', 200)->nullable();
 
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
 
@@ -34,9 +34,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('table_address_migration', function (Blueprint $table) {
+        Schema::table('addresses', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
         });
-        Schema::dropIfExists('table_address_migration');
+        Schema::dropIfExists('addresses');
     }
 };
