@@ -15,7 +15,7 @@ class PaymentStatusSeeder extends Seeder
     {
         DB::table('payments_status')->insert([
             ['status' => 'Pending', 'created_at' => now(), 'updated_at' => now()],
-            ['status' => 'awaiting approval', 'created_at' => now(), 'updated_at' => now()],
+            ['status' => 'Awaiting Approval', 'created_at' => now(), 'updated_at' => now()],
             ['status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
             ['status' => 'Failed', 'created_at' => now(), 'updated_at' => now()],
         ]);
