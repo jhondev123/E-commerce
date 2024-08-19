@@ -16,20 +16,15 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('description', 100);
             $table->float('price');
-            $table->integer('deleted')->default(0);
             // $table->unsignedInteger('grupo_id');
             // $table->unsignedInteger('department_id');
-            
+
             // // Foreign keys
-            // $table->foreign('grupo_id')->references('id')->on('grupo');
+            $table->foreignId('group_id')->constrained();
+
             // $table->foreign('department_id')->references('id')->on('department');
-            $table->foreignId('grupo_id')->constrained();
-            $table->foreignId('departament_id')->constrained();
-
-
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
@@ -39,8 +34,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropForeign(['grupo_id']);
-            $table->dropForeign(['department_id']);
+            $table->dropForeign(['group_id']);
         });
         Schema::dropIfExists('products');
     }
