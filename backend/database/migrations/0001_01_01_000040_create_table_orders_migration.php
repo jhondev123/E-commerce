@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('status');
             $table->float('total');
-            $table->timestamp('delivery_time');
-
+            // $table->timestamp('delivery_time');
+            // $table->foreignId('delivery_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('address_id')->constrained();
             $table->foreignId('payment_id')->constrained();
