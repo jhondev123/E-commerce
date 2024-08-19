@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 class PaymentStatusSeeder extends Seeder
 {
     /**
@@ -12,7 +13,7 @@ class PaymentStatusSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('payment_status')->insert([
+        DB::table('payments_status')->insert([
             ['status' => 'Pending', 'created_at' => now(), 'updated_at' => now()],
             ['status' => 'awaiting approval', 'created_at' => now(), 'updated_at' => now()],
             ['status' => 'Completed', 'created_at' => now(), 'updated_at' => now()],
