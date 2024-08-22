@@ -15,4 +15,4 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/validate/token', [AuthController::class, 'validateToken'])->name('validate.token');
 
 Route::apiResource('products', ProductsController::class);
-Route::get('products/search', [ProductsController::class, 'search']);
+Route::get('product/search', [ProductsController::class, 'search']);

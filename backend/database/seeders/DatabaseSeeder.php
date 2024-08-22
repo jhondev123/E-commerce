@@ -17,6 +17,11 @@ class DatabaseSeeder extends Seeder
             PaymentsSeeder::class,
             PaymentStatusSeeder::class,
             UserAdminSeeder::class,
+            GroupSeeder::class,
+            ProductSeeder::class,
+            // OrderSeeder::class,
+            // OrderItemSeeder::class,
+            // CustomerSeeder::class,
         ]);
     }
 }

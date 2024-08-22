@@ -5,7 +5,7 @@ namespace App\Domain\Entities;
 use App\Domain\Enums\OrderStatusEnum;
 use App\Domain\Enums\PaymentStatusEnum;
 use App\Domain\Enums\PaymentMethodsEnum;
-use App\Domain\VO\Address;
+
 final class Order
 {
     private string $id;
@@ -17,12 +17,22 @@ final class Order
     private PaymentStatusEnum $paymentStatus;
     private PaymentMethodsEnum $paymentMethod;
     private OrderStatusEnum $status;
+    private Delivery $delivery;
     private float $totalPrice;
-    private Address $address;
-    private \DateTimeInterface $delivery_time;
     private \DateTimeInterface|null $createdAt;
     private \DateTimeInterface|null $updatedAt;
- 
+
+
+    public function calculateTotalPrice(): float
+    {
+        $total = 0;
+        foreach ($this->products as $product) {
+            $total += $product->getPrice();
+        }
+        $total += $this->delivery->getPrice();
+        return $total;
+    }
+
     public function getId(): string
     {
         return $this->id;
@@ -49,21 +59,19 @@ final class Order
     }
     public function getTotalPrice(): float
     {
+        $this->totalPrice = $this->calculateTotalPrice();
         return $this->totalPrice;
     }
-    public function getAddress(): Address
+    public function getDelivery(): Delivery
     {
-        return $this->address;
+        return $this->delivery;
     }
-    public function getDeliveryTime(): \DateTimeInterface
-    {
-        return $this->delivery_time;
-    }
-    public function getCreatedAt():?\DateTimeInterface
+
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
-    public function getUpdatedAt():?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -93,19 +101,10 @@ final class Order
         $this->status = $status;
         return $this;
     }
-    public function setTotalPrice(float $totalPrice): Order
+
+    public function setAddress(Delivery $delivery): Order
     {
-        $this->totalPrice = $totalPrice;
-        return $this;
-    }
-    public function setAddress(Address $address): Order
-    {
-        $this->address = $address;
-        return $this;
-    }
-    public function setDeliveryTime(\DateTimeInterface $delivery_time): Order
-    {
-        $this->delivery_time = $delivery_time;
+        $this->delivery = $delivery;
         return $this;
     }
     public function setCreatedAt(?\DateTimeInterface $createdAt): Order
@@ -118,6 +117,4 @@ final class Order
         $this->updatedAt = $updatedAt;
         return $this;
     }
-    
-
 }

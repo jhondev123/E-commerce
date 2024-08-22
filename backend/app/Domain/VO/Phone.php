@@ -7,7 +7,7 @@ final class Phone
     public function __construct(private string $phone)
     {
         $this->validatePhoneNumber($phone);
-        $this->phone = $phone;
+        // $this->phone = $phone;
     }
 
     private function validatePhoneNumber(string $phone): void

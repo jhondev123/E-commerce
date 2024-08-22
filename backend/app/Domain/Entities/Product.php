@@ -4,11 +4,13 @@ namespace App\Domain\Entities;
 
 final class Product
 {
-    private string $id;
+    private ?string $id = null;
+
     private string $name;
     private float $price;
     private string $description;
     private Group $group;
+
     /**
      * @var ProductVariant[]
      *  */
@@ -21,6 +23,22 @@ final class Product
     private \DateTimeInterface|null $createdAt;
     private \DateTimeInterface|null $updatedAt;
     private \DateTimeInterface|null $deletedAt;
+
+    public function __construct() {}
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'price' => $this->price,
+            'description' => $this->description,
+            'group' => $this->group->toArray(),
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+            'deletedAt' => $this->deletedAt,
+        ];
+    }
     public function getId(): string
     {
         return $this->id;

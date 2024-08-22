@@ -4,21 +4,22 @@ namespace App\Domain\Entities;
 
 use App\Domain\VO\Email;
 use App\Domain\VO\Phone;
+use App\Domain\VO\Password;
 
 final class User
 {
     private string $id;
-    private string $name;
-    private Email $email;
     /**
      * @var Address[]
      */
     private array $addresses;
     private bool $isAdmin;
+    private Phone $phone;
     private \DateTimeInterface|null $emailVerifiedAt;
     private \DateTimeInterface|null $createdAt;
     private \DateTimeInterface|null $updatedAt;
-    private Phone $phone;
+
+    public function __construct(private Email $email, private Password $password, private string $name) {}
 
     public function getId(): string
     {
@@ -56,7 +57,10 @@ final class User
     {
         return $this->phone;
     }
-    //create setters
+    public function getPassword(): Password
+    {
+        return $this->password;
+    }
     public function setId(string $id): User
     {
         $this->id = $id;
@@ -100,6 +104,11 @@ final class User
     public function setPhone(Phone $phone): User
     {
         $this->phone = $phone;
+        return $this;
+    }
+    public function setPassword(Password $password): User
+    {
+        $this->password = $password;
         return $this;
     }
 }

@@ -11,6 +11,18 @@ final class Topping
     // private Product $product;
     private \DateTimeInterface|null $createdAt;
     private \DateTimeInterface|null $updatedAt;
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+        ];
+    }
     public function getId(): string
     {
         return $this->id;
@@ -27,11 +39,11 @@ final class Topping
     {
         return $this->price;
     }
-    public function getCreatedAt():?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
-    public function getUpdatedAt():?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
