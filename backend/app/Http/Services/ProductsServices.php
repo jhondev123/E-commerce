@@ -86,7 +86,6 @@ final class ProductsServices
             'description' => 'nullable|string',
             'group' => 'nullable|numeric|exists:groups,id',
         ]);
-        
         $filter->setFilters($data);
         return $this->productRepository->search($filter);
     }

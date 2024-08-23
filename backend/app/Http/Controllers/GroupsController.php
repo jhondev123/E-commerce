@@ -10,10 +10,12 @@ class GroupsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function __construct(private GroupsServices $groupsServices){}
+    public function __construct(private GroupsServices $groupsServices) {}
     public function index()
     {
-        //
+
+        $groups = $this->groupsServices->getAllGroups();
+        return response()->json($groups);
     }
 
     /**
@@ -21,7 +23,11 @@ class GroupsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $groupData = $this->groupsServices->createGroup($request);
+        return response()->json([
+            'message' => 'Group created successfully',
+            'data' => $groupData,
+        ], 201);
     }
 
     /**
@@ -29,7 +35,8 @@ class GroupsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $group = $this->groupsServices->getGroupById($id);
+        return response()->json($group);
     }
 
     /**
@@ -37,7 +44,14 @@ class GroupsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $groupData = $this->groupsServices->update($request, $id);
+        if (!$groupData) {
+            return response()->json(['error' => 'Could not update group'], 500);
+        }
+        return response()->json([
+            'message' => 'Group updated successfully',
+            'data' => $groupData,
+        ], 200);
     }
 
     /**
@@ -45,6 +59,11 @@ class GroupsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+
+        $deleted = $this->groupsServices->deleteGroup($id);
+        if (!$deleted) {
+            return response()->json(['error' => 'Could not delete group'], 500);
+        }
+        return response()->json(['message' => 'Group deleted successfully'], 200);
     }
 }
