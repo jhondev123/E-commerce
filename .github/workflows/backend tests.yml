@@ -12,8 +12,8 @@ jobs:
         php-version: '8.0'
     - uses: actions/checkout@v4
     - name: Acess backend folder
-      run: cd backend && ls -l
-    - name: Copy .env
+      run: cd backend 
+    - name: Copy .env && ls -l
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
       run: composer install --no-interaction
