@@ -23,7 +23,7 @@ class ProductRepository
     }
     public function getProductById($id)
     {
-        $product = ProductModel::find($id)->join('groups', 'products.group_id', '=', 'groups.id')
+        $product = ProductModel::findOrFail($id)->join('groups', 'products.group_id', '=', 'groups.id')
             ->select('products.*', 'groups.name as group_name');
         return $product;
     }

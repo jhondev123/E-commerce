@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->float('price')->default(0);
-
-            $table->foreignId('product_id')->constrained();
+            $table->foreignId('product_id')->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
