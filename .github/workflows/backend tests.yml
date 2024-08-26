@@ -14,9 +14,9 @@ jobs:
     - name: Acess backend folder
       run: cd backend 
     - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');" && ls -l
+      run: cd backend && php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
-      run: composer install --no-interaction
+      run: cd backend && composer install --no-interaction
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
