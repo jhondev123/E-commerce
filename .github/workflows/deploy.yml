@@ -1,22 +1,26 @@
-name: deploy
-
-on:
-    push:
-        branches: [ "main" ]
-  
-  
+on: push
+name: 🚀 Deploy website on push
 jobs:
-    backend-deploy:
-      name: "🎉 Deploy"
-      runs-on: ubuntu-latest
-      steps:
-        - name: "🚚 Get latest code"
-          uses: actions/checkout@v2
-    
-        - name: "📂 Sync files"
-          uses: SamKirkland/FTP-Deploy-Action@4.0.0
-          with:
-            server: ${{ secrets.FTP_HOST }}
-            username: ${{ secrets.ftp_user }}
-            password: ${{ secrets.ftp_password }}
-  
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: Use php 8.3
+      uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+      with:
+        php-version: '8.3'
+      
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+
+    - name: drop and up containers
+      run: |
+            docker-compose down -v
+            docker-compose up -d --build
