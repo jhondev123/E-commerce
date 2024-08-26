@@ -13,8 +13,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Acess backend folder
       run: cd backend 
-    - name: Copy .env && ls -l
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+    - name: Copy .env
+      run: php -r "file_exists('.env') || copy('.env.example', '.env');" && ls -l
     - name: Install Dependencies
       run: composer install --no-interaction
     - name: Generate key
