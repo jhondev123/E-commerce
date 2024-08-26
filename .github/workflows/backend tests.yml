@@ -11,10 +11,8 @@ jobs:
       with:
         php-version: '8.0'
     - uses: actions/checkout@v4
-    - name: test directories
-      run: ls -l
     - name: Acess backend folder
-      run: cd backend
+      run: cd backend && ls -l
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Install Dependencies
