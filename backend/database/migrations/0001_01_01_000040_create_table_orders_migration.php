@@ -18,10 +18,8 @@ return new class extends Migration
             // $table->timestamp('delivery_time');
             // $table->foreignId('delivery_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('address_id')->constrained();
             $table->foreignId('payment_id')->constrained();
             $table->foreignId('payment_status_id')->constrained('payments_status');
-
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,7 +35,6 @@ return new class extends Migration
             $table->dropForeign(['payment_status_id']);
             $table->dropForeign(['user_id']);
             $table->dropForeign(['payment_id']);
-            $table->dropForeign(['address_id']);
         });
 
         Schema::dropIfExists('orders');

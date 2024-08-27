@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Address as AddressModel;
+use App\Models\Phone as PhoneModel;
 
 class UserAdminSeeder extends Seeder
 {
@@ -20,6 +22,23 @@ class UserAdminSeeder extends Seeder
             'password' => Hash::make('Jhon99681424$'),
             'is_admin' => true,
             'email_verified_at' => now(),
+        ]);
+
+        AddressModel::create([
+            'user_id' => 1,
+            'street' => 'Rua antonia rotta ribeiro',
+            'number' => '67',
+            'district' => 'esmeralda',
+            'city' => 'Cascavel',
+            'state' => 'PR',
+            'country' => 'Brasil',
+            'zip_code' => '85806252',
+            'complement' => 'começo da rua'
+        ]);
+
+        PhoneModel::create([
+            'user_id' => 1,
+            'phone' => '45999338406',
         ]);
     }
 }
