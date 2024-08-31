@@ -4,12 +4,7 @@ namespace App\Domain\Entities;
 
 final class Product
 {
-    private ?string $id = null;
 
-    private string $name;
-    private float $price;
-    private string $description;
-    private Group $group;
 
     /**
      * @var ProductVariant[]
@@ -24,7 +19,14 @@ final class Product
     private \DateTimeInterface|null $updatedAt;
     private \DateTimeInterface|null $deletedAt;
 
-    public function __construct() {}
+    public function __construct(
+        private ?string $id = null,
+        private ?string $name = null,
+        private ?float $price = null,
+        private ?string $description = null,
+        private ?Group $group = null
+
+    ) {}
 
     public function toArray(): array
     {
@@ -78,6 +80,11 @@ final class Product
     public function getToppings(): array
     {
         return $this->toppings;
+    }
+    public function setId(string $id): Product
+    {
+        $this->id = $id;
+        return $this;
     }
     public function setName(string $name): Product
     {

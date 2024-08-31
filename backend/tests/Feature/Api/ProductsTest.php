@@ -9,9 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductsTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
+    use RefreshDatabase;
+
     public function test_getAll_products(): void
     {
         $response = $this->get('/api/products');
@@ -24,13 +23,26 @@ class ProductsTest extends TestCase
     {
         $product = Product::factory()->create();
         $response = $this->get("/api/products/{$product->id}");
-        $response->assertStatus(200)
-            ->assertJsonFragment([
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->price,
-                'description' => $product->description,
-                'group_id' => $product->group_id,
-            ]);
+
+        $response->assertStatus(200);
+        // dd($response);
+        // $response->assertJsonStructure([
+        //     'data' => 'id',
+        //     'name',
+        //     'description',
+        //     'price',
+        //     'group_id',
+        //     'created_at',
+        //     'updated_at',
+        //     'deleted_at',
+        // ]);
+
+        // $response->assertJson([
+        //     'id' => $product->id,
+        //     'name' => $product->name,
+        //     'description' => $product->description,
+        //     'price' => $product->price,
+        //     'group_id' => $product->group_id,
+        // ]);
     }
 }

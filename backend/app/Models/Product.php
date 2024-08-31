@@ -10,4 +10,9 @@ class Product extends Model
 {
     use HasFactory;
     public $timestamps = true;
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 }

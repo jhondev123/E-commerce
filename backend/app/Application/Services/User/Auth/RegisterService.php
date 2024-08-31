@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\User\Auth;
+namespace App\Application\Services\User\Auth;
 
 use App\Domain\VO\Email;
 use App\Domain\VO\Password;

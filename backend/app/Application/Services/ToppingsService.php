@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Application\Services;
 
-use App\Http\Repositories\ToppingRepository;
 use Illuminate\Http\Request;
+use App\Infra\Repositories\ToppingRepository;
 
 final class ToppingsService
 {

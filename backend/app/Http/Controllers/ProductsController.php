@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Http\Services\ProductsServices;
+use App\Http\Requests\UpdateProductRequest;
+use App\Application\Services\ProductsServices;
+use App\Http\Requests\StoreProductRequest;
 
 class ProductsController extends Controller
 {
@@ -16,13 +17,14 @@ class ProductsController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        $productData = $this->productService->store($request);
-
-        if (!$productData) {
-            return response()->json(['error' => 'Could not create product'], 500);
+        try {
+            $productData = $this->productService->store($request->validated());
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+
         return response()->json([
             'message' => 'Product created successfully',
             'data' => $productData,
@@ -36,13 +38,14 @@ class ProductsController extends Controller
         return response()->json($product);
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
-        $productData = $this->productService->update($request, $id);
-
-        if (!$productData) {
-            return response()->json(['error' => 'Could not update product'], 500);
+        try {
+            $productData = $this->productService->update($request->validated(), $id);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
+
         return response()->json([
             'message' => 'Product updated successfully',
             'data' => $productData,

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\User\Auth;
+namespace App\Application\Services\User\Auth;
 
 use Laravel\Sanctum\PersonalAccessToken;
 

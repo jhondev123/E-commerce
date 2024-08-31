@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Infra\Repositories;
 
 use App\Models\Topping as ToppingModel;
 

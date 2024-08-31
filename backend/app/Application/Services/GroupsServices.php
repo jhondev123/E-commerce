@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Application\Services;
 
-use App\Http\Repositories\GroupRepository;
 use Illuminate\Http\Request;
+use App\infra\Http\Repositories\GroupRepository;
 
 final class GroupsServices
 {

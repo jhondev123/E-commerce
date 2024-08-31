@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\infra\Repositories;
 
 use App\Models\Group as GroupModel;
 

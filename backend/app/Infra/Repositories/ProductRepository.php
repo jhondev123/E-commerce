@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Repositories;
+namespace App\Infra\Repositories;
 
+use App\Domain\Entities\Group;
 use App\Domain\Entities\Product;
 use App\Http\Filters\SearchProductFilter;
 use App\Models\Product as ProductModel;
@@ -23,12 +24,22 @@ class ProductRepository
     }
     public function getProductById($id)
     {
-        $product = ProductModel::findOrFail($id)->join('groups', 'products.group_id', '=', 'groups.id')
-            ->select('products.*', 'groups.name as group_name');
+        $productData = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
+            ->select('products.*', 'groups.name as group_name')
+            ->where('products.id', $id)
+            ->firstOrFail();
+        $product = new Product(
+            id: $productData->id,
+            name: $productData->name,
+            price: $productData->price,
+            description: $productData->description,
+            group: new Group($productData->group_id)
+        );
         return $product;
     }
     public function store(Product $product): array|bool
     {
+
         $productModel = new ProductModel();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
@@ -39,28 +50,16 @@ class ProductRepository
         }
         return false;
     }
-    public function update(array $productData, string $id): bool|array
+    public function update(Product $product): bool|Product
     {
         $productModel = new ProductModel();
-        $productModel = ProductModel::findOrFail($id);
-        if (!$productModel) {
-            return false;
-        }
-        if (isset($productData['name'])) {
-            $productModel->name = $productData['name'];
-        }
-        if (isset($productData['price'])) {
-            $productModel->price = $productData['price'];
-        }
-        if (isset($productData['description'])) {
-            $productModel->description = $productData['description'];
-        }
-        if (isset($productData['group'])) {
-            $productModel->group_id = $productData['group'];
-        }
-
+        $productModel = ProductModel::findOrFail($product->getId());
+        $productModel->name = $product->getName();
+        $productModel->price = $product->getPrice();
+        $productModel->description = $product->getDescription();
+        $productModel->group_id = $product->getGroup()->getId();
         if ($productModel->save()) {
-            return $productModel->toArray();
+            return $product;
         }
         return false;
     }
