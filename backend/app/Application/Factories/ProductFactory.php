@@ -4,6 +4,7 @@ namespace App\Application\Factories;
 
 use App\Domain\Entities\Group;
 use App\Domain\Entities\Product;
+use App\Application\DTO\Product\StoreProductDTO;
 use App\Application\DTO\Product\UpdateProductDTO;
 
 final class ProductFactory
@@ -18,6 +19,19 @@ final class ProductFactory
         $groupId = $dto->group ?? $existingProduct->getGroup()->getId();
         $product->setGroup(new Group($groupId));
 
+        return $product;
+    }
+    public function createProductFromDtoToStore(StoreProductDTO $dto): Product
+    {
+        $product = new Product(
+            name: $dto->name,
+            price: $dto->price,
+            description: $dto->description,
+        );
+        $groupId = $dto->group ?? null;
+        if ($groupId) {
+            $product->setGroup(new Group(id: $groupId));
+        }
         return $product;
     }
 }

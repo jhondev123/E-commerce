@@ -5,16 +5,8 @@ namespace App\Domain\Entities;
 final class Group
 {
 
-    private string $name;
-    public function __construct(private string $id) {}
+    public function __construct(private string $id,private ?string $name = null) {}
 
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-        ];
-    }
     public function getName(): string
     {
         return $this->name;

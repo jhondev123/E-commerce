@@ -28,19 +28,6 @@ final class Product
 
     ) {}
 
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'price' => $this->price,
-            'description' => $this->description,
-            'group' => $this->group->toArray(),
-            'createdAt' => $this->createdAt,
-            'updatedAt' => $this->updatedAt,
-            'deletedAt' => $this->deletedAt,
-        ];
-    }
     public function getId(): string
     {
         return $this->id;

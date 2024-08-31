@@ -10,9 +10,9 @@ use App\Http\Requests\Product\UpdateProductRequest;
 class ProductsController extends Controller
 {
     public function __construct(private ProductsServices $productService) {}
-    public function index(Request $request)
+    public function index()
     {
-        $products = $this->productService->getAllProductsWithGroup($request);
+        $products = $this->productService->getAllProductsWithGroup();
         return response()->json($products);
     }
 
@@ -40,12 +40,7 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, string $id)
     {
-        try {
-            $productData = $this->productService->update($request->validated(), $id);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-
+        $productData = $this->productService->update($request->validated(), $id);
         return response()->json([
             'message' => 'Product updated successfully',
             'data' => $productData,

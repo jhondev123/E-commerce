@@ -4,40 +4,48 @@ namespace App\Infra\Repositories;
 
 use App\Domain\Entities\Group;
 use App\Domain\Entities\Product;
-use App\Http\Filters\SearchProductFilter;
 use App\Models\Product as ProductModel;
+use App\Http\Filters\SearchProductFilter;
+use App\Application\Mappers\ProductMapper;
 
 class ProductRepository
 {
     public function getAllProductsWithGroups()
     {
-        $productsWithGroups = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
+        $products = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
             ->select('products.*', 'groups.name as group_name')
             ->get();
 
-        return $productsWithGroups;
+        $preparedProducts = [];
+        foreach ($products as $product) {
+            array_push(
+                $preparedProducts,
+                new Product(
+                    id: $product->id,
+                    name: $product->name,
+                    price: $product->price,
+                    description: $product->description,
+                    group: new Group($product->group_id, $product->group_name)
+                )
+            );
+        }
+        return $preparedProducts;
     }
     public function getAllProducts()
     {
         $productsWithGroups = ProductModel::all();
         return $productsWithGroups;
     }
-    public function getProductById($id)
+    public function getProductById($id): Product
     {
         $productData = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
             ->select('products.*', 'groups.name as group_name')
             ->where('products.id', $id)
-            ->firstOrFail();
-        $product = new Product(
-            id: $productData->id,
-            name: $productData->name,
-            price: $productData->price,
-            description: $productData->description,
-            group: new Group($productData->group_id)
-        );
-        return $product;
+            ->firstOrFail()
+            ->toArray();
+        return ProductMapper::toDomain($productData);
     }
-    public function store(Product $product): array|bool
+    public function store(Product $product): Product|bool
     {
 
         $productModel = new ProductModel();
@@ -46,7 +54,7 @@ class ProductRepository
         $productModel->description = $product->getDescription();
         $productModel->group_id = $product->getGroup()->getId();
         if ($productModel->save()) {
-            return $productModel->toArray();
+            return $product;
         }
         return false;
     }
