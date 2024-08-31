@@ -9,9 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
-use App\Http\Services\User\Auth\LoginService;
-use App\Http\Services\User\Auth\RegisterService;
-use App\Http\Services\User\Auth\VerifyTokenService;
+use App\Application\Services\User\Auth\LoginService;
+use App\Application\Services\User\Auth\RegisterService;
+use App\Application\Services\User\Auth\VerifyTokenService;
+
 
 class AuthController extends Controller
 {

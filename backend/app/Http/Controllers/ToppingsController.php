@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\ToppingsService;
 use Illuminate\Http\Request;
+use App\Application\Services\ToppingsService;
 
 class ToppingsController extends Controller
 {

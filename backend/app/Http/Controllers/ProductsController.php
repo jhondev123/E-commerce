@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\UpdateProductRequest;
 use App\Application\Services\ProductsServices;
-use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\Product\StoreProductRequest;
+use App\Http\Requests\Product\UpdateProductRequest;
 
 class ProductsController extends Controller
 {

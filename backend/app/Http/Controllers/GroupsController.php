@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\GroupsServices;
 use Illuminate\Http\Request;
+use App\Application\Services\GroupsServices;
 
 class GroupsController extends Controller
 {

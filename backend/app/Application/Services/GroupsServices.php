@@ -3,7 +3,7 @@
 namespace App\Application\Services;
 
 use Illuminate\Http\Request;
-use App\infra\Http\Repositories\GroupRepository;
+use App\infra\Repositories\GroupRepository;
 
 final class GroupsServices
 {
