@@ -19,20 +19,12 @@ final class GroupsServices
     }
     public function createGroup(Request $request): array
     {
-        $groupData = $request->validate([
-            'name' => 'required|string|unique:groups,name',
-        ]);
-        return $this->groupRepository->createGroup($groupData);
+
     }
     public function update(Request $request, string $id): array
     {
-        $groupData = $request->validate([
-            'name' => 'nullable|string|unique:groups,name',
-        ]);
-        return $this->groupRepository->updateGroup($id, $groupData);
     }
     public function deleteGroup(string $id): bool
     {
-        return $this->groupRepository->deleteGroup($id);
     }
 }

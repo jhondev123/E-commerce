@@ -4,8 +4,8 @@ namespace App\Domain\Entities;
 
 final class Group
 {
-
     public function __construct(private string $id,private ?string $name = null) {}
+
 
     public function getName(): string
     {

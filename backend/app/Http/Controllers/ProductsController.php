@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Application\Services\ProductsServices;
+use App\Application\DTO\Product\StoreProductDTO;
+use App\Application\DTO\Product\UpdateProductDTO;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 
@@ -19,8 +21,15 @@ class ProductsController extends Controller
 
     public function store(StoreProductRequest $request)
     {
+        $productStoreDto = new StoreProductDTO(
+            $request->input('name'),
+            $request->input('price'),
+            $request->input('description'),
+            $request->input('group')
+        );
         try {
-            $productData = $this->productService->store($request->validated());
+
+            $productData = $this->productService->store($productStoreDto);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -40,7 +49,13 @@ class ProductsController extends Controller
 
     public function update(UpdateProductRequest $request, string $id)
     {
-        $productData = $this->productService->update($request->validated(), $id);
+        $productUpdateDto = new UpdateProductDTO(
+            $request->input('name'),
+            $request->input('price'),
+            $request->input('description'),
+            $request->input('group')
+        );
+        $productData = $this->productService->update($productUpdateDto, $id);
         return response()->json([
             'message' => 'Product updated successfully',
             'data' => $productData,

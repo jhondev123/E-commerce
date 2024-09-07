@@ -19,13 +19,12 @@ final class Product
     private \DateTimeInterface|null $updatedAt;
     private \DateTimeInterface|null $deletedAt;
 
+    private string $id;
     public function __construct(
-        private ?string $id = null,
-        private ?string $name = null,
-        private ?float $price = null,
-        private ?string $description = null,
-        private ?Group $group = null
-
+        private string $name,
+        private float $price,
+        private string $description,
+        private Group $group
     ) {}
 
     public function getId(): string

@@ -10,6 +10,7 @@ use App\Application\Mappers\ProductMapper;
 
 class ProductRepository
 {
+
     public function getAllProductsWithGroups()
     {
         $products = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
@@ -18,16 +19,14 @@ class ProductRepository
 
         $preparedProducts = [];
         foreach ($products as $product) {
-            array_push(
-                $preparedProducts,
-                new Product(
-                    id: $product->id,
-                    name: $product->name,
-                    price: $product->price,
-                    description: $product->description,
-                    group: new Group($product->group_id, $product->group_name)
-                )
+            $productToObject = new Product(
+                name: $product->name,
+                price: $product->price,
+                description: $product->description,
+                group: new Group($product->group_id, $product->group_name)
             );
+            $productToObject->setId($product->id);
+            array_push($preparedProducts, $productToObject);
         }
         return $preparedProducts;
     }
@@ -41,9 +40,15 @@ class ProductRepository
         $productData = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
             ->select('products.*', 'groups.name as group_name')
             ->where('products.id', $id)
-            ->firstOrFail()
-            ->toArray();
-        return ProductMapper::toDomain($productData);
+            ->firstOrFail();
+            
+        $product = new Product(
+            name: $productData['name'],
+            price: $productData['price'],
+            description: $productData['description'],
+            group: new Group($productData['group_id'], $productData['group_name'])
+        );
+        return $product;
     }
     public function store(Product $product): Product|bool
     {

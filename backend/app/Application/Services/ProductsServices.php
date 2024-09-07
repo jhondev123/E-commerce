@@ -3,60 +3,57 @@
 namespace App\Application\Services;
 
 use Illuminate\Http\Request;
-use App\Http\Filters\SearchProductFilter;
-use App\Application\DTO\Product\ProductDTO;
+use App\Domain\Entities\Product;
+use Illuminate\Support\Facades\DB;
 use App\Application\DTO\Product\StoreProductDTO;
 use App\Application\Factories\ProductFactory;
 use App\Infra\Repositories\ProductRepository;
 use App\Application\DTO\Product\UpdateProductDTO;
-use App\Domain\UseCases\Product\DestroyProductUseCase;
-use App\Domain\UseCases\Product\UpdateProductUseCase;
-use App\Domain\UseCases\Product\GetAllProductsUseCase;
-use App\Domain\UseCases\Product\GetProductByIdUseCase;
-use App\Domain\UseCases\Product\StoreProductUseCase;
-use PhpParser\Node\Expr\Cast\Bool_;
+use Exception;
 
 final class ProductsServices
 {
     public function __construct(private ProductRepository $repository, private ProductFactory $factory) {}
     public function getAllProductsWithGroup(): array
     {
-        $useCase = new GetAllProductsUseCase($this->repository);
-        return $useCase->execute();
+        return $this->repository->getAllProductsWithGroups();
     }
-    public function getProductById($id): ProductDTO
+    public function getProductById($id): Product
     {
-        $usecase = new GetProductByIdUseCase($this->repository);
-        return $usecase->execute($id);
+        return $this->repository->getProductById($id);
     }
-    public function store(array $productData): ProductDTO
+    public function store(StoreProductDTO $dto): Product
     {
-        $usecase = new StoreProductUseCase($this->repository, $this->factory);
-        $dto = new StoreProductDTO(
-            name: $productData['name'],
-            price: $productData['price'],
-            description: $productData['description'],
-            group: $productData['group'] ?? null,
-        );
-        return $usecase->execute($dto);
+        $product = $dto->toEntity();
+        DB::beginTransaction();
+        try {
+            $productStored = $this->repository->store($product);
+            DB::commit();
+            return $productStored;
+        } catch (\PDOexception $e) {
+            DB::rollBack();
+            throw new Exception("Failed to store product: " . $e->getMessage());
+        }
     }
-    public function update(array $productData, string $id): ProductDTO
+    public function update(UpdateProductDTO $dto, string $id): Product
     {
 
-        $useCase = new UpdateProductUseCase($this->repository, $this->factory);
-        $dto = new UpdateProductDTO(
-            id: $id,
-            name: $productData['name'] ?? null,
-            price: $productData['price'] ?? null,
-            description: $productData['description'] ?? null,
-            group: $productData['group'] ?? null,
-        );
-        return $useCase->execute($dto);
+        $product = $dto->toEntity();
+        $product->setId($id);
+        DB::beginTransaction();
+
+        try {
+            $productUpdated = $this->repository->update($product);
+            DB::commit();
+            return $productUpdated;
+        } catch (\PDOexception $e) {
+            DB::rollBack();
+            throw new Exception("Failed to update product: " . $e->getMessage());
+        }
     }
     public function destroy(string $id): bool
     {
-        $usecase = new DestroyProductUseCase($this->repository);
-        return $usecase->execute($id);
+        return $this->repository->destroy($id);
     }
     public function search(Request $request) {}
 }
