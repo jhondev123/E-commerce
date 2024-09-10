@@ -8,24 +8,18 @@ final class Topping
     private string $name;
     private string $description;
     private float $price;
-    // private Product $product;
-    private \DateTimeInterface|null $createdAt;
-    private \DateTimeInterface|null $updatedAt;
 
-    public function toArray(): array
+    public function __construct(string $name, string $description, float $price, ?string $id = null)
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'price' => $this->price,
-            'createdAt' => $this->createdAt,
-            'updatedAt' => $this->updatedAt,
-        ];
+        $this->name = $name;
+        $this->description = $description;
+        $this->price = $price;
+        $this->id = $id;
     }
-    public function getId(): string
+
+    public function getPrice(): float
     {
-        return $this->id;
+        return $this->price;
     }
     public function getName(): string
     {
@@ -34,42 +28,5 @@ final class Topping
     public function getDescription(): string
     {
         return $this->description;
-    }
-    public function getPrice(): float
-    {
-        return $this->price;
-    }
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-    public function setName(string $name): Topping
-    {
-        $this->name = $name;
-        return $this;
-    }
-    public function setDescription(string $description): Topping
-    {
-        $this->description = $description;
-        return $this;
-    }
-    public function setPrice(float $price): Topping
-    {
-        $this->price = $price;
-        return $this;
-    }
-    public function setCreatedAt(?\DateTimeInterface $createdAt): Topping
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): Topping
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
     }
 }

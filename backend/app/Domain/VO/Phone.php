@@ -4,26 +4,25 @@ namespace App\Domain\VO;
 
 final class Phone
 {
-    public function __construct(private string $phone)
+    private string $phoneNumber;
+    public function __construct(string $phoneNumber)
     {
-        $this->validatePhoneNumber($phone);
-        // $this->phone = $phone;
+        $this->validatePhoneNumber($phoneNumber);
+        $this->phoneNumber = $phoneNumber;
     }
-
     private function validatePhoneNumber(string $phone): void
     {
-        $pattern = '^(?:(?:\+|00)?(55)\s?)?(?:(?:\(?[1-9][0-9]\)?)?\s?)?(?:((?:9\d|[2-9])\d{3})-?(\d{4}))$';
-
+        $pattern = '/^(?:(?:\+|00)?(55)\s?)?(?:\(?([1-9][0-9])\)?\s?)?(?:((?:9\d|[2-9])\d{3})-?(\d{4}))$/';
         if (!preg_match($pattern, $phone)) {
             throw new \InvalidArgumentException("Invalid phone number format.");
         }
     }
-    public function value(): string
+    public function getPhone(): string
     {
-        return $this->phone;
+        return $this->phoneNumber;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->phone;
+        return $this->phoneNumber;
     }
 }

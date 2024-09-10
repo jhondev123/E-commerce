@@ -43,10 +43,10 @@ class ProductRepository
             ->firstOrFail();
             
         $product = new Product(
-            name: $productData['name'],
-            price: $productData['price'],
-            description: $productData['description'],
-            group: new Group($productData['group_id'], $productData['group_name'])
+            name: $productData->name,
+            price: $productData->price,
+            description: $productData->description,
+            group: new Group($productData->group_id, $productData->group_name)
         );
         return $product;
     }

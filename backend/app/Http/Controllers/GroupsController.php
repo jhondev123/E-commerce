@@ -13,7 +13,6 @@ class GroupsController extends Controller
     public function __construct(private GroupsServices $groupsServices) {}
     public function index()
     {
-
         $groups = $this->groupsServices->getAllGroups();
         return response()->json($groups);
     }
@@ -45,9 +44,7 @@ class GroupsController extends Controller
     public function update(Request $request, string $id)
     {
         $groupData = $this->groupsServices->update($request, $id);
-        if (!$groupData) {
-            return response()->json(['error' => 'Could not update group'], 500);
-        }
+
         return response()->json([
             'message' => 'Group updated successfully',
             'data' => $groupData,

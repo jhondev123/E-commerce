@@ -4,111 +4,73 @@ namespace App\Domain\Entities;
 
 use App\Domain\VO\Email;
 use App\Domain\VO\Phone;
+use App\Domain\VO\Address;
 use App\Domain\VO\Password;
 
 final class User
 {
     private string $id;
-    /**
-     * @var Address[]
-     */
-    private array $addresses;
+    private string $name;
+    private array $address = [];
+    private Email $email;
+    private Phone $phoneNumber;
     private bool $isAdmin;
-    private Phone $phone;
-    private \DateTimeInterface|null $emailVerifiedAt;
-    private \DateTimeInterface|null $createdAt;
-    private \DateTimeInterface|null $updatedAt;
-
-    public function __construct(private Email $email, private Password $password, private string $name) {}
-
-    public function getId(): string
-    {
-        return $this->id;
+    private string $password;
+    public function __construct(
+        string $name,
+        Address|array $address,
+        Email $email,
+        Phone $phoneNumber,
+        bool $isAdmin,
+        string $password,
+        ?string $id = null
+    ) {
+        $this->name = $name;
+        if ($address instanceof Address) {
+            array_push($this->address, $address);
+        } else {
+            $this->validateAddressesArray($address);
+            $this->address = $address;
+        }
+        $this->email = $email;
+        $this->phoneNumber = $phoneNumber;
+        $this->isAdmin = $isAdmin;
+        $this->password = $password;
+        $this->id = $id;
     }
+
     public function getName(): string
     {
         return $this->name;
+    }
+    public function getAddresses(): array
+    {
+        return $this->address;
     }
     public function getEmail(): Email
     {
         return $this->email;
     }
-    public function getAddresses(): array
+    public function getPhoneNumber(): Phone
     {
-        return $this->addresses;
+        return $this->phoneNumber;
     }
-    public function getIsAdmin(): bool
+    public function isAdmin(): bool
     {
         return $this->isAdmin;
     }
-    public function getEmailVerifiedAt(): ?\DateTimeInterface
-    {
-        return $this->emailVerifiedAt;
-    }
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-    public function getPhone(): Phone
-    {
-        return $this->phone;
-    }
-    public function getPassword(): Password
+    public function getPassword(): string
     {
         return $this->password;
     }
-    public function setId(string $id): User
+    public function addAddress(Address $address): void
     {
-        $this->id = $id;
-        return $this;
+        array_push($this->address, $address);
     }
-    public function setName(string $name): User
+    public function validateAddressesArray(array $addresses): void
     {
-        $this->name = $name;
-        return $this;
-    }
-    public function setEmail(Email $email): User
-    {
-        $this->email = $email;
-        return $this;
-    }
-    public function setAddresses(array $addresses): User
-    {
-        $this->addresses = $addresses;
-        return $this;
-    }
-    public function setIsAdmin(bool $isAdmin): User
-    {
-        $this->isAdmin = $isAdmin;
-        return $this;
-    }
-    public function setEmailVerifiedAt(?\DateTimeInterface $emailVerifiedAt): User
-    {
-        $this->emailVerifiedAt = $emailVerifiedAt;
-        return $this;
-    }
-    public function setCreatedAt(?\DateTimeInterface $createdAt): User
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): User
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-    public function setPhone(Phone $phone): User
-    {
-        $this->phone = $phone;
-        return $this;
-    }
-    public function setPassword(Password $password): User
-    {
-        $this->password = $password;
-        return $this;
+        if (empty($addresses)) {
+            throw new \InvalidArgumentException("Addresses array cannot be empty.");
+        }
     }
 }

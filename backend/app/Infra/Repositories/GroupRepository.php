@@ -2,6 +2,7 @@
 
 namespace App\infra\Repositories;
 
+use App\Domain\Entities\Group;
 use App\Models\Group as GroupModel;
 
 final class GroupRepository
@@ -10,37 +11,30 @@ final class GroupRepository
     {
         return GroupModel::all()->toArray();
     }
-    public function getGroupById(string $id): array
+    public function getGroupById(string $id): Group
     {
-        return GroupModel::findOrFail($id)->toArray();
+        $groupData = GroupModel::findOrFail($id);
+        $group = new Group($groupData->id, $groupData->name);
+        return $group;
     }
-    public function createGroup(array $groupData): array
+    public function createGroup(Group $group): Group
     {
         $groupModel = new GroupModel();
-        $groupModel->name = $groupData['name'];
-        if ($groupModel->save()) {
-            return $groupModel->toArray();
-        }
-        return [];
+        $groupModel->name = $group->name;
+        $groupModel->save();
+        return $group;
     }
-    public function updateGroup(string $id, array $groupData): array|bool
+    public function updateGroup(string $id, Group $group): Group
     {
         $groupModel = GroupModel::findOrFail($id);
-        if (!$groupModel) {
-            return false;
-        }
-        $groupModel->name = $groupData['name'] ?? $groupModel->name;
-        if ($groupModel->save()) {
-            return $groupModel->toArray();
-        }
-        return false;
+
+        $groupModel->name = $group->name;
+        $groupModel->save();
+        return $group;
     }
     public function deleteGroup(string $id): bool
     {
         $groupModel = GroupModel::findOrFail($id);
-        if (!$groupModel) {
-            return [];
-        }
         return $groupModel->delete();
     }
 }

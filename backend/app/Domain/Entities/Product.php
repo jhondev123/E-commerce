@@ -4,40 +4,29 @@ namespace App\Domain\Entities;
 
 final class Product
 {
-
-
-    /**
-     * @var ProductVariant[]
-     *  */
-    private array $productVariants;
-
-    /**
-     * @var Topping[]
-     *  */
-    private array $toppings;
-    private \DateTimeInterface|null $createdAt;
-    private \DateTimeInterface|null $updatedAt;
-    private \DateTimeInterface|null $deletedAt;
-
     private string $id;
-    public function __construct(
-        private string $name,
-        private float $price,
-        private string $description,
-        private Group $group
-    ) {}
+    private string $name;
+    private string $description;
+    private float $price;
+    private Group $group;
 
-    public function getId(): string
-    {
-        return $this->id;
+    public function __construct(
+        string $name,
+        string $description,
+        float $price,
+        Group $group,
+        ?string $id = null
+    ) {
+        $this->name = $name;
+        $this->description = $description;
+        $this->price = $price;
+        $this->group = $group;
+        $this->id = $id;
     }
+
     public function getName(): string
     {
         return $this->name;
-    }
-    public function getPrice(): float
-    {
-        return $this->price;
     }
     public function getDescription(): string
     {
@@ -47,74 +36,13 @@ final class Product
     {
         return $this->group;
     }
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getGroupName(): string
     {
-        return $this->createdAt;
+        return $this->group->getName();
     }
-    public function getUpdatedAt(): ?\DateTimeInterface
+
+    public function getPrice(): float
     {
-        return $this->updatedAt;
-    }
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->deletedAt;
-    }
-    public function getProductVariants(): array
-    {
-        return $this->productVariants;
-    }
-    public function getToppings(): array
-    {
-        return $this->toppings;
-    }
-    public function setId(string $id): Product
-    {
-        $this->id = $id;
-        return $this;
-    }
-    public function setName(string $name): Product
-    {
-        $this->name = $name;
-        return $this;
-    }
-    public function setPrice(float $price): Product
-    {
-        $this->price = $price;
-        return $this;
-    }
-    public function setDescription(string $description): Product
-    {
-        $this->description = $description;
-        return $this;
-    }
-    public function setGroup(Group $group): Product
-    {
-        $this->group = $group;
-        return $this;
-    }
-    public function setCreatedAt(?\DateTimeInterface $createdAt): Product
-    {
-        $this->createdAt = $createdAt;
-        return $this;
-    }
-    public function setUpdatedAt(?\DateTimeInterface $updatedAt): Product
-    {
-        $this->updatedAt = $updatedAt;
-        return $this;
-    }
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): Product
-    {
-        $this->deletedAt = $deletedAt;
-        return $this;
-    }
-    public function setProductVariants(array $productVariants): Product
-    {
-        $this->productVariants = $productVariants;
-        return $this;
-    }
-    public function setToppings(array $toppings): Product
-    {
-        $this->toppings = $toppings;
-        return $this;
+        return $this->price;
     }
 }
