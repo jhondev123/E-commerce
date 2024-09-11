@@ -21,7 +21,8 @@ readonly class UpdateProductDTO
             $this->name,
             $this->price,
             $this->description,
-            new Group($this->group)
+            new Group($this->group),
+            $this->id
         );
         
     }

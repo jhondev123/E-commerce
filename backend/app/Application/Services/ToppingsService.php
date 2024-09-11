@@ -2,10 +2,8 @@
 
 namespace App\Application\Services;
 
-use Illuminate\Http\Request;
-use App\Domain\Entities\Topping;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\ToppingRequest;
+use App\Application\DTO\Topping\ToppingDTO;
 use App\Infra\Repositories\ToppingRepository;
 
 final class ToppingsService
@@ -19,39 +17,30 @@ final class ToppingsService
     {
         return $this->toppingRepository->getToppingById($id);
     }
-    public function store(ToppingRequest $request): Topping
+    public function store(ToppingDTO $dto): ToppingDTO
 
     {
-        $topping = new Topping(
-            $request->get('price'),
-            $request->get('name'),
-            $request->get('description')
-        );
+        $topping = $dto->toEntity();
         DB::beginTransaction();
         try {
 
             $createdTopping = $this->toppingRepository->store($topping);
             DB::commit();
-            return $createdTopping;
+            return $dto->entityToDto($createdTopping);
         } catch (\PDOException $e) {
             DB::rollBack();
             throw new \Exception('Error storing topping: ' . $e->getMessage());
         }
     }
-    public function update(ToppingRequest $request, string $id): Topping
+    public function update(ToppingDTO $dto, string $id): ToppingDTO
     {
-        $topping = new \App\Domain\Entities\Topping(
-            $request->get('price'),
-            $request->get('name'),
-            $request->get('description')
-        );
+        $topping = $dto->toEntity();
         DB::beginTransaction();
         try {
-
             $updatedTopping = $this->toppingRepository->update($topping, $id);
             DB::commit();
-            return $updatedTopping;
-        } catch (\PDOException $e) {
+            return $dto->entityToDto($updatedTopping);
+        } catch (\Exception $e) {
             DB::rollBack();
             throw new \Exception('Error updating topping: ' . $e->getMessage());
         }

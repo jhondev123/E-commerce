@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ToppingRequest;
 use App\Application\Services\ToppingsService;
 
 class ToppingsController extends Controller
@@ -16,7 +17,7 @@ class ToppingsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ToppingRequest $request)
     {
         //
     }
@@ -32,7 +33,7 @@ class ToppingsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ToppingRequest $request, string $id)
     {
         //
     }

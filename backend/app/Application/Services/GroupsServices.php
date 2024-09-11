@@ -5,6 +5,7 @@ namespace App\Application\Services;
 use Illuminate\Http\Request;
 use App\Domain\Entities\Group;
 use Illuminate\Support\Facades\DB;
+use App\Application\DTO\Group\GroupDTO;
 use App\infra\Repositories\GroupRepository;
 
 final class GroupsServices
@@ -19,7 +20,7 @@ final class GroupsServices
     {
         return $this->groupRepository->getGroupById($id);
     }
-    public function createGroup(Request $request): Group
+    public function createGroup(Request $request): GroupDTO
     {
         $request->validate([
             "name" => "required|string|max:255",
@@ -27,15 +28,16 @@ final class GroupsServices
         $group = new Group(name: $request->name);
         DB::beginTransaction();
         try {
-            $creadtedGroup = $this->groupRepository->createGroup($group);
+            $creadtedGroup = $this->groupRepository->store($group);
+            $groupDto = new GroupDTO($creadtedGroup->getName(), $creadtedGroup->getId());
             DB::commit();
-            return $creadtedGroup;
+            return $groupDto;
         } catch (\PDOException $e) {
             DB::rollBack();
             throw $e;
         }
     }
-    public function update(Request $request, string $id): Group
+    public function update(Request $request, string $id): GroupDTO
     {
         $request->validate([
             "name" => "required|string|max:255",
@@ -43,9 +45,10 @@ final class GroupsServices
         $group = new Group(id: $id, name: $request->name);
         DB::beginTransaction();
         try {
-            $updatedGroup = $this->groupRepository->updateGroup($id, $group);
+            $updatedGroup = $this->groupRepository->update($id, $group);
             DB::commit();
-            return $updatedGroup;
+            $groupDto = new GroupDTO($updatedGroup->getName(), $updatedGroup->getId());
+            return $groupDto;
         } catch (\PDOException $e) {
             DB::rollBack();
             throw $e;
@@ -53,6 +56,6 @@ final class GroupsServices
     }
     public function deleteGroup(string $id): bool
     {
-        return $this->groupRepository->deleteGroup($id);
+        return $this->groupRepository->delete($id);
     }
 }

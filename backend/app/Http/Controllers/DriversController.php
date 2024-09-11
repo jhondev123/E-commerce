@@ -2,47 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Application\DTO\Driver\DriverDTO;
+use App\Application\Services\DriverService;
+use App\Http\Requests\DriverRequest;
 use Illuminate\Http\Request;
 
 class DriversController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(private DriverService $service) {}
+
     public function index()
     {
-        //
+        return response()->json($this->service->getAllDrivers());
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+
+    public function store(DriverRequest $request)
     {
-        //
+        $driverDTO = new DriverDTO(
+            $request->get('name'),
+            $request->get('phone'),
+            $request->get('vehicle'),
+            $request->get('plate')
+        );
+        $createdDriver = $this->service->store($driverDTO);
+        return response()->json([
+            'message' => 'Driver created successfully',
+            'data' => $createdDriver,
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
-        //
+        return response()->json($this->service->getDeliveryById($id));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(DriverRequest $request, string $id)
     {
-        //
+        $driverDTO = new DriverDTO(
+            $request->get('name'),
+            $request->get('phone'),
+            $request->get('vehicle'),
+            $request->get('plate')
+        );
+        $updatedDriver = $this->service->update($driverDTO, $id);
+        return response()->json([
+            'message' => 'Driver updated successfully',
+            'data' => $updatedDriver,
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $this->service->delete($id);
+        return response()->json(['message' => 'Driver deleted successfully']);
     }
 }

@@ -15,4 +15,10 @@ class Product extends Model
     {
         return $this->belongsTo(Group::class);
     }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_products')
+            ->withPivot('quantity', 'total');
+    }
 }

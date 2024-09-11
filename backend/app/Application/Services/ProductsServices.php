@@ -39,7 +39,6 @@ final class ProductsServices
     {
 
         $product = $dto->toEntity();
-        $product->setId($id);
         DB::beginTransaction();
 
         try {

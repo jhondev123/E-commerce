@@ -17,22 +17,22 @@ final class GroupRepository
         $group = new Group($groupData->id, $groupData->name);
         return $group;
     }
-    public function createGroup(Group $group): Group
+    public function store(Group $group): Group
     {
         $groupModel = new GroupModel();
-        $groupModel->name = $group->name;
+        $groupModel->name = $group->getName();
         $groupModel->save();
         return $group;
     }
-    public function updateGroup(string $id, Group $group): Group
+    public function update(string $id, Group $group): Group
     {
         $groupModel = GroupModel::findOrFail($id);
 
-        $groupModel->name = $group->name;
+        $groupModel->name = $group->getName();
         $groupModel->save();
         return $group;
     }
-    public function deleteGroup(string $id): bool
+    public function delete(string $id): bool
     {
         $groupModel = GroupModel::findOrFail($id);
         return $groupModel->delete();

@@ -26,8 +26,8 @@ final class ToppingRepository
     public function store(Topping $topping): Topping
     {
         $toppingModel = new ToppingModel();
-        $toppingModel->name = $topping->name;
-        $toppingModel->description = $topping->description;
+        $toppingModel->name = $topping->getName();
+        $toppingModel->description = $topping->getDescription();
         $toppingModel->price = $topping->getPrice();
         $toppingModel->save();
         return $topping;
@@ -35,8 +35,8 @@ final class ToppingRepository
     public function update(Topping $topping, string $id): Topping
     {
         $toppingModel = ToppingModel::findOrFail($id);
-        $toppingModel->name = $topping->name;
-        $toppingModel->description = $topping->description;
+        $toppingModel->name = $topping->getName();
+        $toppingModel->description = $topping->getDescription();
         $toppingModel->price = $topping->getPrice();
         return $topping;
     }

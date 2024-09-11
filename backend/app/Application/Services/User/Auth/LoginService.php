@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 final class LoginService
 {
-    public function login(Email $email, Password $password)
+    public function login(Email $email, string $password)
     {
         $credentials = ['email' => (string)$email, 'password' => (string)$password];
         try {

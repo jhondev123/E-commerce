@@ -4,7 +4,7 @@ namespace App\Domain\Entities;
 
 final class Topping
 {
-    private string $id;
+    private ?string $id = null;
     private string $name;
     private string $description;
     private float $price;
@@ -28,5 +28,9 @@ final class Topping
     public function getDescription(): string
     {
         return $this->description;
+    }
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

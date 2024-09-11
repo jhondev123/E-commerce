@@ -9,7 +9,7 @@ use App\Models\User;
 
 class RegisterService
 {
-    public function register($name, Email $email, Password $password)
+    public function register($name, Email $email, string $password)
     {
         try {
             User::create([
