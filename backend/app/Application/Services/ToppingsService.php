@@ -18,7 +18,6 @@ final class ToppingsService
         return $this->toppingRepository->getToppingById($id);
     }
     public function store(ToppingDTO $dto): ToppingDTO
-
     {
         $topping = $dto->toEntity();
         DB::beginTransaction();
