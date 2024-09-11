@@ -7,21 +7,14 @@ use App\Models\Topping as ToppingModel;
 
 final class ToppingRepository
 {
-    public function getAllToppings(): array
+    public function getAllToppings()
     {
-        return ToppingModel::all()->toArray();
+        return ToppingModel::all();
     }
-    public function getToppingById(string $id): Topping
+    public function getToppingById(string $id)
     {
-        $topping = ToppingModel::findOrFail($id);
-        return new Topping(
-            $topping->price,
-            $topping->id,
-            $topping->name,
-            $topping->description,
-            $topping->created_at,
-            $topping->updated_at
-        );
+        return ToppingModel::findOrFail($id);
+       
     }
     public function store(Topping $topping): Topping
     {
@@ -38,6 +31,7 @@ final class ToppingRepository
         $toppingModel->name = $topping->getName();
         $toppingModel->description = $topping->getDescription();
         $toppingModel->price = $topping->getPrice();
+        $toppingModel->save();
         return $topping;
     }
     public function destroy(string $id): bool
