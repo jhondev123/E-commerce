@@ -20,6 +20,7 @@ class UserAdminSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('Jhon99681424$'),
+            'phone' => '45999681424',
             'is_admin' => true,
             'email_verified_at' => now(),
         ]);
@@ -34,11 +35,6 @@ class UserAdminSeeder extends Seeder
             'country' => 'Brasil',
             'zip_code' => '85806252',
             'complement' => 'começo da rua'
-        ]);
-
-        PhoneModel::create([
-            'user_id' => 1,
-            'phone' => '45999338406',
         ]);
     }
 }

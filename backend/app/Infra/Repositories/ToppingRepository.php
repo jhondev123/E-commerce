@@ -11,10 +11,9 @@ final class ToppingRepository
     {
         return ToppingModel::all();
     }
-    public function getToppingById(string $id)
+    public function getToppingById(string $id): ToppingModel
     {
         return ToppingModel::findOrFail($id);
-       
     }
     public function store(Topping $topping): Topping
     {

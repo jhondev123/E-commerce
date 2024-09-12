@@ -5,13 +5,13 @@ namespace App\Models;
 use App\Models\OrderProduct;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Topping extends Model
 {
     use HasFactory;
-    public function orderProducts()
+    public function products(): BelongsToMany
     {
-        return $this->belongsToMany(OrderProduct::class, 'order_product_toppings')
-            ->withPivot('quantity', 'extra_price'); // Colunas extras da tabela pivot
+        return $this->belongsToMany(Product::class, 'order_product_toppings');
     }
 }

@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Domain\Entities\Order\OrderPayment;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use PSpell\Config;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,15 +16,16 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            PaymentsSeeder::class,
+            PaymentMethodsSeeder::class,
             DriverSeeder::class,
-            PaymentStatusSeeder::class,
             UserAdminSeeder::class,
             GroupSeeder::class,
             ProductSeeder::class,
             ToppingsSeeder::class,
             OrderSeeder::class,
-            // CustomerSeeder::class,
+            OrderPaymentsSeeder::class,
+            ConfigSeeder::class,
+
         ]);
     }
 }

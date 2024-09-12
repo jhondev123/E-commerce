@@ -11,7 +11,6 @@ use App\Domain\Exceptions\OrderStatusException;
 
 final class Order
 {
-    private string $id;
 
     private array $orderItems;
     private OrderPayment $payment;
@@ -26,9 +25,8 @@ final class Order
         User $customer,
         Delivery $delivery,
         OrderStatus $status,
-        ?string $id = null
+        private ?string $id = null
     ) {
-
         $this->validateOrderItems($orderItems);
         $this->orderItems = $orderItems;
         $this->payment = $payment;
@@ -80,15 +78,19 @@ final class Order
             throw new OrderStatusException('Cannot change status of a Refused order');
         }
 
-        if ($this->payment->getStatus() !== PaymentStatus::PAID) {
+        if ($this->payment->getStatus() !== PaymentStatus::PAID && $newStatus !== OrderStatus::CANCELLED) {
             throw new OrderStatusException('Cannot change order status before payment is made');
         }
 
+
         $validTransitions = [
+            OrderStatus::AWAITING_PAYMENT->name => [OrderStatus::PENDING, OrderStatus::CANCELLED],
             OrderStatus::PENDING->name => [OrderStatus::REFUSED, OrderStatus::CONFIRMED, OrderStatus::CANCELLED],
             OrderStatus::CONFIRMED->name => [OrderStatus::INDELIVERY, OrderStatus::CANCELLED],
             OrderStatus::INDELIVERY->name => [OrderStatus::DELIVERED, OrderStatus::CANCELLED],
         ];
+
+
 
         $transition = $validTransitions[$this->status->name] ?? [];
         if (!in_array($newStatus, $transition)) {
@@ -110,5 +112,21 @@ final class Order
     public function getTotal(): float
     {
         return $this->total;
+    }
+    public function getCustomer(): User
+    {
+        return $this->customer;
+    }
+    public function getOrderItems(): array
+    {
+        return $this->orderItems;
+    }
+    public function getPayment(): OrderPayment
+    {
+        return $this->payment;
+    }
+    public function getDelivery(): Delivery
+    {
+        return $this->delivery;
     }
 }

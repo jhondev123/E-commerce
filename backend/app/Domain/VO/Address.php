@@ -20,7 +20,8 @@ final class Address
         string $district,
         string $number,
         string $complement,
-        string $zipCode
+        string $zipCode,
+        private ?string $id = null
     ) {
         self::validateZipCode($zipCode);
         $this->street = $street;
@@ -70,5 +71,9 @@ final class Address
     public function getZipCode(): string
     {
         return $this->zipCode;
+    }
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

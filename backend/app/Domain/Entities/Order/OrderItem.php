@@ -60,6 +60,11 @@ class OrderItem
         array_push($this->toppings, $topping);
         return $this;
     }
+    public function setToppings(array $toppings): self
+    {
+        $this->toppings = $toppings;
+        return $this;
+    }
     public function getToppings(): array
     {
         return $this->toppings;

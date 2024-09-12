@@ -15,12 +15,10 @@ class OrderSeeder extends Seeder
     {
         OrderModel::create([
             'user_id' => 1,
-            'payment_id' => 1,
-            'payment_status_id' => 1,
             'status' => 'pending',
             'total' => 25,
         ]);
-        
+
         DeliveryModel::create([
             'order_id' => 1,
             'driver_id' => 1,
@@ -33,6 +31,7 @@ class OrderSeeder extends Seeder
             'product_id' => 1,
             'order_id' => 1,
             'quantity' => 2,
+            'price' => 25,
             'total' => 50,
         ]);
         OrderProductTopping::create([

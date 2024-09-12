@@ -11,44 +11,23 @@ use App\Application\Mappers\ProductMapper;
 class ProductRepository
 {
 
-    public function getAllProductsWithGroups()
+    public function getAllProductsWithGroups(): ProductModel
     {
-        $products = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
+        return ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
             ->select('products.*', 'groups.name as group_name')
             ->get();
-
-        $preparedProducts = [];
-        foreach ($products as $product) {
-            $productToObject = new Product(
-                name: $product->name,
-                price: $product->price,
-                description: $product->description,
-                group: new Group($product->group_id, $product->group_name)
-            );
-            $productToObject->setId($product->id);
-            array_push($preparedProducts, $productToObject);
-        }
-        return $preparedProducts;
     }
     public function getAllProducts()
     {
         $productsWithGroups = ProductModel::all();
         return $productsWithGroups;
     }
-    public function getProductById($id): Product
+    public function getProductById($id): ProductModel
     {
-        $productData = ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
+        return ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
             ->select('products.*', 'groups.name as group_name')
             ->where('products.id', $id)
             ->firstOrFail();
-            
-        $product = new Product(
-            name: $productData->name,
-            price: $productData->price,
-            description: $productData->description,
-            group: new Group($productData->group_id, $productData->group_name)
-        );
-        return $product;
     }
     public function store(Product $product): Product|bool
     {

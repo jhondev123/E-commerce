@@ -1,9 +1,12 @@
 <?php
 
+use App\Domain\Enums\PaymentMethods;
+use App\Facades\DbConfig;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 
 Route::get('/user', function (Request $request) {
@@ -21,3 +24,8 @@ Route::get('product/search', [ProductsController::class, 'search']);
 
 // Groups routes
 Route::apiResource('groups', GroupsController::class);
+
+Route::get('/teste', function () {});
+
+Route::post('/order', [OrdersController::class, 'store']);
+Route::get('/order/{id}', [OrdersController::class, 'getProductByUserId']);

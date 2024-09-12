@@ -26,16 +26,8 @@ final class GroupsServices
             "name" => "required|string|max:255",
         ]);
         $group = new Group(name: $request->name);
-        DB::beginTransaction();
-        try {
-            $creadtedGroup = $this->groupRepository->store($group);
-            $groupDto = new GroupDTO($creadtedGroup->getName(), $creadtedGroup->getId());
-            DB::commit();
-            return $groupDto;
-        } catch (\PDOException $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        $creadtedGroup = $this->groupRepository->store($group);
+        return new GroupDTO($creadtedGroup->getName(), $creadtedGroup->getId());
     }
     public function update(Request $request, string $id): GroupDTO
     {
@@ -43,16 +35,8 @@ final class GroupsServices
             "name" => "required|string|max:255",
         ]);
         $group = new Group(id: $id, name: $request->name);
-        DB::beginTransaction();
-        try {
-            $updatedGroup = $this->groupRepository->update($id, $group);
-            DB::commit();
-            $groupDto = new GroupDTO($updatedGroup->getName(), $updatedGroup->getId());
-            return $groupDto;
-        } catch (\PDOException $e) {
-            DB::rollBack();
-            throw $e;
-        }
+        $updatedGroup = $this->groupRepository->update($id, $group);
+        return new GroupDTO($updatedGroup->getName(), $updatedGroup->getId());
     }
     public function deleteGroup(string $id): bool
     {

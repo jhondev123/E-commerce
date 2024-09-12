@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('order_payments', function (Blueprint $table) {
             $table->id();
             $table->string('status');
-            $table->float('total');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('payment_method_id')->constrained('payment_methods');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -26,11 +25,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            // Remove foreign key constraints
-            $table->dropForeign(['user_id']);
+        Schema::table('order_payments', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropForeign(['payment_method_id']);
         });
-
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('order_payments');
     }
 };

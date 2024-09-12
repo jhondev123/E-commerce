@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('order_products', function (Blueprint $table) {
             $table->id();
-            $table->float('quantity');
-            $table->float('total');
             $table->foreignId('order_id')->constrained();
             $table->foreignId('product_id')->constrained();
+            $table->float('quantity');
+            $table->float('total');
+            $table->float('price');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

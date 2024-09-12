@@ -4,6 +4,7 @@ namespace App\Application\Services;
 
 use Illuminate\Support\Facades\DB;
 use App\Application\DTO\Topping\ToppingDTO;
+use App\Domain\Entities\Topping;
 use App\Infra\Repositories\ToppingRepository;
 
 final class ToppingsService
@@ -13,9 +14,19 @@ final class ToppingsService
     {
         return $this->toppingRepository->getAllToppings();
     }
-    public function getToppingById($id)
+    public function getToppingById(string $id)
     {
         return $this->toppingRepository->getToppingById($id);
+    }
+    public function getToppingByIdToEntity(string $id): Topping
+    {
+        $toppingData = $this->toppingRepository->getToppingById($id);
+        return new Topping(
+            $toppingData->name,
+            $toppingData->description,
+            $toppingData->price,
+            $toppingData->id
+        );
     }
     public function store(ToppingDTO $dto): ToppingDTO
     {

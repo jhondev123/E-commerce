@@ -9,7 +9,6 @@ use App\Domain\VO\Password;
 
 final class User
 {
-    private string $id;
     private string $name;
     private array $address = [];
     private Email $email;
@@ -23,7 +22,7 @@ final class User
         Phone $phoneNumber,
         bool $isAdmin,
         string $password,
-        ?string $id = null
+        private ?string $id = null
     ) {
         $this->name = $name;
         if ($address instanceof Address) {
@@ -72,5 +71,18 @@ final class User
         if (empty($addresses)) {
             throw new \InvalidArgumentException("Addresses array cannot be empty.");
         }
+    }
+    public function getAddressById(string $id)
+    {
+        foreach ($this->address as $address) {
+            if ($address->getId() === $id) {
+                return $address;
+            }
+        }
+        throw new \InvalidArgumentException("Address not found.");
+    }
+    public function getId(): string
+    {
+        return $this->id;
     }
 }

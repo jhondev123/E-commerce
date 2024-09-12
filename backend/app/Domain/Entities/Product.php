@@ -4,7 +4,6 @@ namespace App\Domain\Entities;
 
 final class Product
 {
-    private string $id;
     private string $name;
     private string $description;
     private float $price;
@@ -15,7 +14,7 @@ final class Product
         string $description,
         float $price,
         Group $group,
-        ?string $id = null
+        private ?string $id = null
     ) {
         $this->name = $name;
         $this->description = $description;
@@ -44,5 +43,9 @@ final class Product
     public function getPrice(): float
     {
         return $this->price;
+    }
+    public function getId(): string
+    {
+        return $this->id;
     }
 }
