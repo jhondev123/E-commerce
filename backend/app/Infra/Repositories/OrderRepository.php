@@ -8,6 +8,7 @@ use App\Models\Order as OrderModel;
 use App\Domain\Entities\Order\Order;
 use App\Application\DTO\Order\StoreOrderDTO;
 use App\Application\DTO\Order\UpdateOrderDTO;
+use App\Domain\Entities\Order\Delivery;
 
 class OrderRepository
 {
@@ -21,7 +22,7 @@ class OrderRepository
     }
     public function getUserOrdersWithProductsAndToppings($userId)
     {
-        $orders = OrderModel::with(['products'])
+        $orders = OrderModel::with(['products','delivery'])
             ->where('user_id', $userId)
             ->get();
         return $orders;
@@ -34,6 +35,7 @@ class OrderRepository
         $orderModel->total = $order->getTotal();
         $orderModel->save();
         $this->storeProductsInOrder($orderModel, $order->getOrderItems());
+        $this->storeDelivery($orderModel, $order->getDelivery());
         return $orderModel;
     }
 
@@ -63,9 +65,14 @@ class OrderRepository
             }
         }
     }
-
-
-
+    public function storeDelivery(OrderModel $order, Delivery $delivery)
+    {
+        $order->delivery()->create([
+            'price' => $delivery->getPrice(),
+            'address_id' => $delivery->getAddress()->getId(),
+            'delivery_forecast' => $delivery->getDeliveryForeCast()->format('Y-m-d H:i:s')
+        ]);
+    }
 
     public function delete(string $id) {}
 }

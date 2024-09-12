@@ -2,6 +2,8 @@
 
 namespace App\Domain\Entities\Order;
 
+use DateTime;
+use DateTimeInterface;
 use App\Domain\VO\Address;
 use App\Domain\Entities\Driver;
 
@@ -10,8 +12,8 @@ final class Delivery
     private float $price;
     private Driver $driver;
     private Address $address;
-    private \DateTimeInterface $deliveryForeCast;
-    public function __construct(float $price,  Address $address, \DateTimeInterface $deliveryForeCast, private ?string $id = null)
+    private DateTimeInterface $deliveryForeCast;
+    public function __construct(float $price,  Address $address, DateTimeInterface $deliveryForeCast, private ?string $id = null)
     {
         $this->price = $price;
         $this->address = $address;
@@ -27,7 +29,7 @@ final class Delivery
     {
         return $this->address;
     }
-    public function getDeliveryForeCast(): \DateTimeInterface
+    public function getDeliveryForeCast(): DateTime
     {
         return $this->deliveryForeCast;
     }

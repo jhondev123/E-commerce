@@ -41,65 +41,20 @@ class OrdersController extends Controller
     }
 
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreOrderRequest $request)
     {
-        // validar os dados de entrada
-        // criar o endereço da entrega
-        // criar o cliente
-        // criar a entrega 
-        // criar os items no pedido
-        // criar o pagamento
-        // Pegar o respectivo usuário do pedido
-        // definir o status do pagamento como pendente
-        // definir o status do pedido como pendente
-
-        // pegando o address selecionado
-        $addressId = $request->get('address_id');
-
-        // pegando o usuário do pedido
-        $userDto = $this->userService->getByUserId($request->get('user_id'));
-        $user = $userDto->toEntity();
-
-        //pegando o endereço selecionado para entrega
-        $addressSelected = $user->getAddressById($addressId);
-
-        //criando o delivery
-        $delivery = new Delivery(DbConfig::get('delivery_fee'), $addressSelected, new DateTime());
-
-        //pegando os itens no pedido
-        $orderItems = [];
-        foreach ($request->get('items') as $item) {
-            $product = $this->productService->getProductByIdToEntity($item['product_id']);
-            $toppings = [];
-            foreach ($item['toppings'] as $topping) {
-                $toppings[] = $this->toppingService->getToppingByIdToEntity($topping);
-            }
-            $orderItem = new OrderItem($product, $item['quantity']);
-            $orderItem->setToppings($toppings);
-            $orderItems[] = $orderItem;
-        }
-        // criando o pagamento
-        $orderPayment = new OrderPayment(
-            PaymentMethods::from($request->get('payment_method')),
-            PaymentStatus::PENDING
-        );
-
-        $order = new StoreOrderDTO(
-            $orderItems,
-            $orderPayment,
-            $user,
-            $delivery,
-            OrderStatus::AWAITING_PAYMENT
-        );
         try {
-            $orderCreated = $this->orderService->store($order);
-            return response()->json($orderCreated, 201);
+            $dto = new StoreOrderDTO(
+                $request->address_id,
+                $request->user_id,
+                $request->items,
+                $request->payment_method
+            );
+
+            $order = $this->orderService->store($dto);
+            return response()->json(['message' => 'Order created successfully', 'data' => $order], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 400);
+            return response()->json(['message' => 'Error creating order, ' . $e->getMessage()], 500);
         }
     }
 

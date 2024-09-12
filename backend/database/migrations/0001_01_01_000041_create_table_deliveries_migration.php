@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('deliveries', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('estimated_delivery_time');
+            $table->timestamp('delivery_forecast');
             $table->float('price');
             $table->foreignId('order_id')->constrained();
             $table->foreignId('address_id')->constrained();
-            $table->foreignId('driver_id')->constrained();
             $table->timestamps();
         });
     }

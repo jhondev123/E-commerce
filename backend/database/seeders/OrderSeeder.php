@@ -21,10 +21,9 @@ class OrderSeeder extends Seeder
 
         DeliveryModel::create([
             'order_id' => 1,
-            'driver_id' => 1,
             'address_id' => '1',
             'price' => 25,
-            'estimated_delivery_time' => new \DateTime('2022-01-01 12:00'),
+            'delivery_forecast' => new \DateTime('2022-01-01 12:00'),
         ]);
 
         OrderProductModel::create([
