@@ -25,5 +25,9 @@ class ConfigSeeder extends Seeder
             'key' => 'max_distance_for_delivery',
             'value' => 10,
         ]);
+        ConfigModel::create([
+            'key' => 'payment_timeout',
+            'value' => 30,
+        ]);
     }
 }

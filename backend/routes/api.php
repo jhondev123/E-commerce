@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
+use App\Infra\Repositories\OrderRepository;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,7 +26,11 @@ Route::get('product/search', [ProductsController::class, 'search']);
 // Groups routes
 Route::apiResource('groups', GroupsController::class);
 
-Route::get('/teste', function () {});
+Route::get('/teste', function () {
+    $orderRepository = new OrderRepository();
+    $order = $orderRepository->getOrderByIdToEntity('13');
+    dd($order);
+});
 
 Route::post('/order', [OrdersController::class, 'store']);
 Route::get('/order/{id}', [OrdersController::class, 'getProductByUserId']);

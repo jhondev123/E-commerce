@@ -2,13 +2,22 @@
 
 namespace App\Infra\Repositories;
 
+use App\Domain\VO\Email;
+use App\Domain\VO\Phone;
+use App\Domain\VO\Address;
 use App\Models\OrderProduct;
+use App\Domain\Entities\User;
+use App\Domain\Enums\OrderStatus;
 use Illuminate\Support\Facades\DB;
+use App\Domain\Enums\PaymentStatus;
 use App\Models\Order as OrderModel;
 use App\Domain\Entities\Order\Order;
+use App\Domain\Enums\PaymentMethods;
+use App\Domain\Entities\Order\Delivery;
+use App\Domain\Entities\Order\OrderPayment;
 use App\Application\DTO\Order\StoreOrderDTO;
 use App\Application\DTO\Order\UpdateOrderDTO;
-use App\Domain\Entities\Order\Delivery;
+use App\Application\Mappers\Order\OrderMapper;
 
 class OrderRepository
 {
@@ -20,9 +29,27 @@ class OrderRepository
     {
         return OrderModel::with('products')->find($id);
     }
+    public function getOrderByIdToEntity(string $orderId): Order
+    {
+        $order = OrderModel::with(['products.group', 'delivery.address', 'payment', 'user.addresses'])
+            ->where('id', $orderId)
+            ->firstOrFail();
+
+        $orderItems = OrderMapper::createOrderItems($order->products->toArray());
+
+        $orderPayment = new OrderPayment(
+            PaymentMethods::from($order->payment->first()->payment_method_id),
+            PaymentStatus::from($order->payment->first()->status),
+        );
+
+        $user = OrderMapper::createUser($order);
+        $delivery = OrderMapper::createDelivery($order);
+
+        return OrderMapper::createOrder($delivery, $orderItems, $orderPayment, $user, OrderStatus::from($order->status));
+    }
     public function getUserOrdersWithProductsAndToppings($userId)
     {
-        $orders = OrderModel::with(['products','delivery'])
+        $orders = OrderModel::with(['products', 'delivery'])
             ->where('user_id', $userId)
             ->get();
         return $orders;
@@ -36,6 +63,7 @@ class OrderRepository
         $orderModel->save();
         $this->storeProductsInOrder($orderModel, $order->getOrderItems());
         $this->storeDelivery($orderModel, $order->getDelivery());
+        $this->storeOrderPayment($orderModel, $order->getPayment());
         return $orderModel;
     }
 
@@ -50,6 +78,13 @@ class OrderRepository
 
             $this->attachToppingsToOrderProduct($orderModel, $product);
         }
+    }
+    public function storeOrderPayment(OrderModel $orderModel, OrderPayment $orderPayment)
+    {
+        $orderModel->payment()->create([
+            'payment_method_id' => $orderPayment->getMethod()->value,
+            'status' => $orderPayment->getStatus()->value,
+        ]);
     }
 
     public function attachToppingsToOrderProduct(OrderModel $orderModel, $product)
@@ -74,5 +109,6 @@ class OrderRepository
         ]);
     }
 
-    public function delete(string $id) {}
+    public function cancelOrder(Order $order) {}
+    public function refusedOrder(Order $order) {}
 }

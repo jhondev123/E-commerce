@@ -66,7 +66,14 @@ class OrderService
     }
     public function getOrderByUserId(string $id)
     {
-
         return $this->orderRepository->getUserOrdersWithProductsAndToppings($id);
     }
+    public function cancelOrder(string $orderId)
+    {
+        $order = $this->orderRepository->getOrderByIdToEntity($orderId);
+        $order->cancel();
+        
+        
+    }
+
 }

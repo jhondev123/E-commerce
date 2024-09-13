@@ -129,4 +129,12 @@ final class Order
     {
         return $this->delivery;
     }
+    public function cancel()
+    {
+        $this->changeOrderStatus(OrderStatus::CANCELLED);
+    }
+    public function refused()
+    {
+        $this->changeOrderStatus(OrderStatus::REFUSED);
+    }
 }
