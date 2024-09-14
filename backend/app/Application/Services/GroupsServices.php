@@ -6,37 +6,31 @@ use Illuminate\Http\Request;
 use App\Domain\Entities\Group;
 use Illuminate\Support\Facades\DB;
 use App\Application\DTO\Group\GroupDTO;
-use App\infra\Repositories\GroupRepository;
+use App\Infra\Repositories\GroupRepository;
 
 final class GroupsServices
 {
     public function __construct(private GroupRepository $groupRepository) {}
-    public function getAllGroups(): array
+    public function getAllGroups()
     {
         return $this->groupRepository->getAllGroups();
     }
 
-    public function getGroupById(string $id): Group
+    public function getGroupById(string $id)
     {
         return $this->groupRepository->getGroupById($id);
     }
-    public function createGroup(Request $request): GroupDTO
+    public function createGroup(GroupDTO $dto)
     {
-        $request->validate([
-            "name" => "required|string|max:255",
-        ]);
-        $group = new Group(name: $request->name);
-        $creadtedGroup = $this->groupRepository->store($group);
-        return new GroupDTO($creadtedGroup->getName(), $creadtedGroup->getId());
+
+        $group = new Group(name: $dto->name);
+        return $this->groupRepository->store($group);
     }
-    public function update(Request $request, string $id): GroupDTO
+    public function update(GroupDTO $dto, string $id)
     {
-        $request->validate([
-            "name" => "required|string|max:255",
-        ]);
-        $group = new Group(id: $id, name: $request->name);
-        $updatedGroup = $this->groupRepository->update($id, $group);
-        return new GroupDTO($updatedGroup->getName(), $updatedGroup->getId());
+
+        $group = new Group(id: $id, name: $dto->name);
+        return $this->groupRepository->update($id, $group);
     }
     public function deleteGroup(string $id): bool
     {

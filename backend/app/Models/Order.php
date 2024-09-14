@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Order extends Model
 {
     use HasFactory;
+    protected $fillable = ['status'];
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'order_products')

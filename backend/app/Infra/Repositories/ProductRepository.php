@@ -7,53 +7,45 @@ use App\Domain\Entities\Product;
 use App\Models\Product as ProductModel;
 use App\Http\Filters\SearchProductFilter;
 use App\Application\Mappers\ProductMapper;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository
 {
 
-    public function getAllProductsWithGroups(): ProductModel
+    public function getAllProductsWithGroups(): Collection
     {
-        return ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
-            ->select('products.*', 'groups.name as group_name')
-            ->get();
+        return ProductModel::with('group')->get();
     }
     public function getAllProducts()
     {
-        $productsWithGroups = ProductModel::all();
-        return $productsWithGroups;
+        return ProductModel::all();
     }
     public function getProductById($id): ProductModel
     {
-        return ProductModel::join('groups', 'products.group_id', '=', 'groups.id')
-            ->select('products.*', 'groups.name as group_name')
-            ->where('products.id', $id)
+        return ProductModel::find($id)
+            ->with('group')
             ->firstOrFail();
     }
-    public function store(Product $product): Product|bool
+    public function store(Product $product)
     {
-
         $productModel = new ProductModel();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
         $productModel->description = $product->getDescription();
         $productModel->group_id = $product->getGroup()->getId();
-        if ($productModel->save()) {
-            return $product;
-        }
-        return false;
+        $productModel->save();
+        return $productModel;
     }
-    public function update(Product $product): bool|Product
+    public function update(Product $product, string $id)
     {
         $productModel = new ProductModel();
-        $productModel = ProductModel::findOrFail($product->getId());
+        $productModel = ProductModel::findOrFail($id);
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
         $productModel->description = $product->getDescription();
         $productModel->group_id = $product->getGroup()->getId();
-        if ($productModel->save()) {
-            return $product;
-        }
-        return false;
+        $productModel->save();
+        return $productModel;
     }
     public function destroy(string $id): bool
     {

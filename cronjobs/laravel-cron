@@ -1,0 +1,2 @@
+*/15 * * * * cd /var/www/html && php artisan orders:check-expired >> /var/log/cron.log 2>&1
+

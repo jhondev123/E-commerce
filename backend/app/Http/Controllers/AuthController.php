@@ -23,7 +23,7 @@ class AuthController extends Controller
 
         $response = $loginService->login(
             email: new Email($credentials['email']),
-            password: new Password($credentials['password'])
+            password: $credentials['password']
         );
 
         return $response;
@@ -36,12 +36,11 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed'
         ]);
 
-
         $registerService = new RegisterService;
         return $registerService->register(
             name: $request->name,
             email: new Email($request->email),
-            password: new Password($request->password)
+            password: $request->password
         );
     }
 

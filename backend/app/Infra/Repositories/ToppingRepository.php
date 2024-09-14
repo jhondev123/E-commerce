@@ -15,23 +15,25 @@ final class ToppingRepository
     {
         return ToppingModel::findOrFail($id);
     }
-    public function store(Topping $topping): Topping
+    public function store(Topping $topping)
     {
         $toppingModel = new ToppingModel();
         $toppingModel->name = $topping->getName();
         $toppingModel->description = $topping->getDescription();
         $toppingModel->price = $topping->getPrice();
+        $toppingModel->group_id = $topping->getGroupId();
         $toppingModel->save();
-        return $topping;
+        return $toppingModel;
     }
-    public function update(Topping $topping, string $id): Topping
+    public function update(Topping $topping, string $id)
     {
         $toppingModel = ToppingModel::findOrFail($id);
         $toppingModel->name = $topping->getName();
         $toppingModel->description = $topping->getDescription();
         $toppingModel->price = $topping->getPrice();
+        $toppingModel->group_id = $topping->getGroupId();
         $toppingModel->save();
-        return $topping;
+        return $toppingModel;
     }
     public function destroy(string $id): bool
     {

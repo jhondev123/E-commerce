@@ -11,6 +11,7 @@ class ToppingDTO
         public string $name,
         public string $description,
         public float $price,
+        public float $group_id,
         public ?string $id = null
     ){}
     public function toEntity():Topping
@@ -19,6 +20,7 @@ class ToppingDTO
             $this->name,
             $this->description,
             $this->price,
+            $this->group_id,
             $this->id
         );
     }
@@ -28,8 +30,7 @@ class ToppingDTO
             $topping->getName(),
             $topping->getDescription(),
             $topping->getPrice(),
-            $topping->getId()
-        );
-        
+            $topping->getGroupId(),
+        );    
     }
 }

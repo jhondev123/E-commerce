@@ -25,33 +25,24 @@ final class ToppingsService
             $toppingData->name,
             $toppingData->description,
             $toppingData->price,
+            $toppingData->group_id,
             $toppingData->id
         );
     }
-    public function store(ToppingDTO $dto): ToppingDTO
+    public function store(ToppingDTO $dto)
     {
-        $topping = $dto->toEntity();
-        DB::beginTransaction();
         try {
-
-            $createdTopping = $this->toppingRepository->store($topping);
-            DB::commit();
-            return $dto->entityToDto($createdTopping);
-        } catch (\PDOException $e) {
-            DB::rollBack();
-            throw new \Exception('Error storing topping: ' . $e->getMessage());
+            return $this->toppingRepository->store($dto->toEntity());
+        } catch (\Exception $e) {
+            throw new \Exception('Error creating topping: ' . $e->getMessage());
         }
     }
-    public function update(ToppingDTO $dto, string $id): ToppingDTO
+    public function update(ToppingDTO $dto, string $id)
     {
         $topping = $dto->toEntity();
-        DB::beginTransaction();
         try {
-            $updatedTopping = $this->toppingRepository->update($topping, $id);
-            DB::commit();
-            return $dto->entityToDto($updatedTopping);
+            return $this->toppingRepository->update($topping, $id);
         } catch (\Exception $e) {
-            DB::rollBack();
             throw new \Exception('Error updating topping: ' . $e->getMessage());
         }
     }

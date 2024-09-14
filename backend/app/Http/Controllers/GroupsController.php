@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\GroupRequest;
+use App\Application\DTO\Group\GroupDTO;
 use App\Application\Services\GroupsServices;
 
 class GroupsController extends Controller
@@ -20,12 +22,13 @@ class GroupsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(GroupRequest $request)
     {
-        $groupData = $this->groupsServices->createGroup($request);
+        $groupDto = new GroupDTO($request->input('name'));
+
         return response()->json([
             'message' => 'Group created successfully',
-            'data' => $groupData,
+            'data' => $this->groupsServices->createGroup($groupDto),
         ], 201);
     }
 
@@ -41,9 +44,10 @@ class GroupsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(GroupRequest $request, string $id)
     {
-        $groupData = $this->groupsServices->update($request, $id);
+        $dto = new GroupDTO($request->name, $id);
+        $groupData = $this->groupsServices->update($dto, $id);
 
         return response()->json([
             'message' => 'Group updated successfully',

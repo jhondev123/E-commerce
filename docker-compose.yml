@@ -43,15 +43,19 @@ services:
     networks:
       - app
 
-  api2:
+  cron:
     build:
       context: .
-      dockerfile: backend.dockerfile
-    container_name: backend_container_2
-    restart: unless-stopped
-    working_dir: /var/www
-    networks:
-      - app
+      dockerfile: cronjobs.dockerfile
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=acaidelivery
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+
+
 
 networks:
   app:

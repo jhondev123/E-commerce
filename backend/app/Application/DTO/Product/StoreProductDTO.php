@@ -7,11 +7,12 @@ use App\Domain\Entities\Product;
 
 final class StoreProductDTO
 {
+
     public function __construct(
-        public readonly ?string $name,
-        public readonly ?float $price,
-        public readonly ?string $description,
-        public readonly ?string $group
+        public readonly string $name,
+        public readonly float $price,
+        public readonly string $description,
+        public readonly string $group,
     ) {}
     public function toEntity(): Product
     {
@@ -19,7 +20,7 @@ final class StoreProductDTO
             name: $this->name,
             price: $this->price,
             description: $this->description,
-            group: new Group($this->group)
+            group: new Group(id: $this->group)
         );
     }
 }

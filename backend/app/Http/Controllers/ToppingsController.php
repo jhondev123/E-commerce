@@ -21,6 +21,7 @@ class ToppingsController extends Controller
             $request->input('name'),
             $request->input('description'),
             $request->input('price'),
+            $request->input('group_id'),
         );
         $createdTopping = $this->toppingService->store($toppingDTO);
         return response()->json([
@@ -43,6 +44,7 @@ class ToppingsController extends Controller
             $request->input('name'),
             $request->input('description'),
             $request->input('price'),
+            $request->input('group_id'),
         );
         $updatedTopping = $this->toppingService->update($toppingDTO, $id);
         return response()->json([

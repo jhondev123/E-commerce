@@ -1,36 +1,33 @@
 <?php
 
-namespace App\infra\Repositories;
+namespace App\Infra\Repositories;
 
 use App\Domain\Entities\Group;
 use App\Models\Group as GroupModel;
 
 final class GroupRepository
 {
-    public function getAllGroups(): array
+    public function getAllGroups()
     {
-        return GroupModel::all()->toArray();
+        return GroupModel::all();
     }
-    public function getGroupById(string $id): Group
+    public function getGroupById(string $id)
     {
-        $groupData = GroupModel::findOrFail($id);
-        $group = new Group($groupData->id, $groupData->name);
-        return $group;
+        return GroupModel::findOrFail($id);
     }
-    public function store(Group $group): Group
+    public function store(Group $group)
     {
         $groupModel = new GroupModel();
         $groupModel->name = $group->getName();
         $groupModel->save();
-        return $group;
+        return $groupModel;
     }
-    public function update(string $id, Group $group): Group
+    public function update(string $id, Group $group)
     {
         $groupModel = GroupModel::findOrFail($id);
-
         $groupModel->name = $group->getName();
         $groupModel->save();
-        return $group;
+        return $groupModel;
     }
     public function delete(string $id): bool
     {

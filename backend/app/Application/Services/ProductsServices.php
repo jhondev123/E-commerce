@@ -7,15 +7,17 @@ use Illuminate\Http\Request;
 use App\Domain\Entities\Group;
 use App\Domain\Entities\Product;
 use App\Models\Product as ProductModel;
+use Illuminate\Database\Eloquent\Collection;
 use App\Application\Factories\ProductFactory;
 use App\Infra\Repositories\ProductRepository;
 use App\Application\DTO\Product\StoreProductDTO;
 use App\Application\DTO\Product\UpdateProductDTO;
+use App\Application\Services\GroupsServices;
 
 final class ProductsServices
 {
     public function __construct(private ProductRepository $repository, private ProductFactory $factory) {}
-    public function getAllProductsWithGroup(): ProductModel
+    public function getAllProductsWithGroup(): Collection
     {
         return $this->repository->getAllProductsWithGroups();
     }
@@ -34,16 +36,15 @@ final class ProductsServices
             $product->id
         );
     }
-    public function store(StoreProductDTO $dto): Product
+    public function store(StoreProductDTO $dto)
     {
         $product = $dto->toEntity();
         return $this->repository->store($product);
     }
-    public function update(UpdateProductDTO $dto, string $id): Product
+    public function update(UpdateProductDTO $dto, string $id)
     {
-
         $product = $dto->toEntity();
-        return  $this->repository->update($product);
+        return  $this->repository->update($product, $id);
     }
     public function destroy(string $id): bool
     {

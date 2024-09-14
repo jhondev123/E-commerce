@@ -29,15 +29,13 @@ class ProductsController extends Controller
         );
         try {
 
-            $productData = $this->productService->store($productStoreDto);
+            return response()->json([
+                'message' => 'Product created successfully',
+                'data' => $this->productService->store($productStoreDto),
+            ], 201);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        return response()->json([
-            'message' => 'Product created successfully',
-            'data' => $productData,
-        ], 201);
     }
 
 

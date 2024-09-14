@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->float('price')->default(0);
-            $table->foreignId('product_id')->nullable()->constrained();
+            $table->foreignId('group_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,7 +28,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('toppings', function (Blueprint $table) {
-            $table->dropForeign(['product_id']);
+            $table->dropForeign(['group_id']);
         });
         Schema::dropIfExists('toppings');
     }

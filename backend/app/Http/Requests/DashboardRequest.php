@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ToppingRequest extends FormRequest
+class DashboardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,12 +22,7 @@ class ToppingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => 'required|numeric',
-            'name' => 'required|string',
-            'description' => 'required|string',
-            'group_id' => 'required|numeric|exists:groups,id',
-
-
+            //
         ];
     }
 }

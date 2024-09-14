@@ -17,7 +17,7 @@ class ToppingsSeeder extends Seeder
             'name' => 'Leite em Pó',
             'description' => '',
             'price' => 1.99,
-            'product_id' => null,
+            'group_id' => 1,
         ]);
     }
 }
