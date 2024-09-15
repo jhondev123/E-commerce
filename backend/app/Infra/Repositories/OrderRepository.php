@@ -27,7 +27,13 @@ class OrderRepository
     }
     public function getOrderById(string $id)
     {
-        return OrderModel::with('products')->find($id);
+        return OrderModel::with('products', 'delivery.address', 'payment')->findOrFail($id);
+    }
+    public function getOrderByIdToAdmin(string $id)
+    {
+        return OrderModel::with(['products.group', 'delivery.address', 'payment', 'user.addresses'])
+            ->where('id', $id)
+            ->firstOrFail();
     }
     public function getOrderByIdToEntity(string $orderId): Order
     {

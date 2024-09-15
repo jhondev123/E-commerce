@@ -72,8 +72,9 @@ class OrderService
     {
         $order = $this->orderRepository->getOrderByIdToEntity($orderId);
         $order->cancel();
-        
-        
     }
-
+    public function getOrderByUserIdToAdmin(string $id)
+    {
+        return $this->orderRepository->getOrderByIdToAdmin($id);
+    }
 }

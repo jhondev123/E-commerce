@@ -20,4 +20,5 @@ class DbConfigService
         Config::updateOrCreate(['key' => $key], ['value' => $value]);
         Cache::forget("config.{$key}");
     }
+  
 }
